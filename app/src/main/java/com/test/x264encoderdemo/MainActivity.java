@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private Camera camera;
 
     private Parameters parameters;
+    // 图片旋转角度
+    private int degree;
 
     private int width = 640;
 
@@ -43,9 +45,9 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     private int bitrate = 90000;
 
     private x264sdk x264;
-
-    private int timespan = 90000 / fps;
-
+    // 时间戳
+    private int timespan = bitrate / fps;
+    // 总时间
     private long time;
 
     @Override
@@ -88,7 +90,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
     };
 
     private static String path = Environment.getExternalStorageDirectory().getAbsolutePath() +
-            "/zpf_test.h264";
+            "/x264_test.h264";
     private BufferedOutputStream outputStream;
     FileOutputStream outStream;
 
@@ -114,7 +116,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
             byte[] yuv420 = new byte[width * height * 3 / 2];
             YUV420SP2YUV420(data, yuv420, width, height);
             byte[] yuv420_rotate = new byte[width * height * 3 / 2];
-            YuvUtils.getInstance().yuv420Rotate90(yuv420, yuv420_rotate, width, height, 90);
+            YuvUtils.getInstance().yuv420Rotate90(yuv420, yuv420_rotate, width, height, degree);
             x264.PushOriStream(yuv420_rotate, yuv420_rotate.length, time);
         }
     }
@@ -221,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements SurfaceHolder.Cal
         } else {  // back-facing
             result = (info.orientation - degrees + 360) % 360;
         }
+        this.degree = result;
         Log.d(TAG, "result = " + result);
         camera.setDisplayOrientation(result);
     }
