@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">X264encoderdemo</string>
+    <string name="app_start">开始编码</string>
+    <string name="app_stop">停止编码</string>
+</resources>
